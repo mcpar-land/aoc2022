@@ -19,29 +19,29 @@ func main() {
 
 	day := *dayFlag
 
-	if day == 0 {
-		fmt.Println("Please supply a day.")
-		os.Exit(1)
-	}
-	df, ok := days[day]
-	if !ok {
-		fmt.Printf("Day %d not found\n", day)
-		os.Exit(1)
-	}
-
-	inputFilePath := fmt.Sprintf("./inputs/%02d.txt", day)
-	fmt.Println("Reading", inputFilePath)
-	buf, err := ioutil.ReadFile(inputFilePath)
+	err := executeDay(day)
 	if err != nil {
-		fmt.Printf("%v", err)
-		os.Exit(1)
-	}
-	input := string(buf)
-
-	err = df(input)
-	if err != nil {
-		fmt.Printf("Error running day %d\n", day)
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+func executeDay(day int) error {
+	if day == 0 {
+		return fmt.Errorf("Please supply a day")
+	}
+	df, ok := days[day]
+	if !ok {
+		return fmt.Errorf("Day %d not found", day)
+	}
+	inputFilePath := fmt.Sprintf("./inputs/%02d.txt", day)
+	buf, err := ioutil.ReadFile(inputFilePath)
+	if err != nil {
+		return err
+	}
+	err = df(string(buf))
+	if err != nil {
+		return fmt.Errorf("Error running day %d: %v", day, err)
+	}
+	return nil
 }
