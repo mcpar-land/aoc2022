@@ -16,6 +16,7 @@ var days = map[int]DayFunc{
 	4: Day04,
 	5: Day05,
 	6: Day06,
+	7: Day07,
 }
 
 func main() {
